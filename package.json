@@ -10,7 +10,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:Yerror.playErrorSound"
+    
   ],
   "main": "./extension.js",
   "contributes": {
