@@ -10,35 +10,46 @@ const { exec } = require('child_process');
 /**
  * @param {vscode.ExtensionContext} context
  */
+
+// function to get the number of errors in the open file
+function getNumErrors() {
+    const activeTextEditor = vscode.window.activeTextEditor
+    if (!activeTextEditor) {
+      return 0
+    }
+    const document = activeTextEditor.document
+
+    const numErrors = vscode.languages
+      .getDiagnostics(document.uri)
+      .filter(d => d.severity === vscode.DiagnosticSeverity.Error).length
+
+    return numErrors
+}
+
 function activate(context) {
 
-
-
-	console.log('Extension "Error Sound" activée.');	
-	console.log('Commande powershell');
+	console.log('Extension "Error Sound" activée.');
 
     let disposable = vscode.commands.registerCommand('Yerror.playErrorSound', () => {
         const activeEditor = vscode.window.activeTextEditor;
         if (activeEditor) {
-            // Obtenez le texte du fichier actif
-            const documentText = activeEditor.document.getText();
 
-			const chemin = "C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav"
+            // constante
+            const chemin = "C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav"
+            const numErrors = getNumErrors();
 
-            // Exemple : recherche de la chaîne "erreur" dans le texte du fichier
-            if (documentText.includes("erreur")) {
-                // Jouez un son lorsque l'erreur est détectée
-                exec(chemin, (error, stdout, stderr) => {
+            if (numErrors >= 1) {
+                console.error(`Votre code a ${numErrors} erreurs`)
+                exec(chemin, (error) => {
                     if (error) {
-						console.log("Erreur du son")
                         console.error(`Erreur lors de la lecture du son : ${error}`);
+                        console.log("La musique n'est pas trouvée")
                     }
                 });
-            } 	
+            }
         }
     });
     context.subscriptions.push(disposable);
-
 
 }
 
