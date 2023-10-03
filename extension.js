@@ -36,9 +36,8 @@ function activate(context) {
         if (activeEditor) {
 
             // constante
-            // const chemin = "C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav"
             const numErrors = getNumErrors();
-            
+
             // mettre le son en arrière plan et l'executer 
             const command = process.platform === 'win32' ? 'powershell -Command "(New-Object Media.SoundPlayer \'C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav\').PlaySync()"' : 'afplay C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav\'';
 
