@@ -9,12 +9,14 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:Yerror.playErrorSound"
+  ],
   "main": "./extension.js",
   "contributes": {
     "commands": [{
-      "command": "yerror.helloWorld",
-      "title": "Hello World"
+      "command": "Yerror.playErrorSound",
+      "title": "Yerror"
     }]
   },
   "scripts": {
