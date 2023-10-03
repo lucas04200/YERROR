@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const { exec } = require('child_process');
+const { Console } = require('console');
 
 
 // This method is called when your extension is activated
@@ -40,6 +41,8 @@ function activate(context) {
 
             if (numErrors >= 1) {
                 console.error(`Votre code a ${numErrors} erreurs`)
+                vscode.window.showInformationMessage(`Votre code a ${numErrors} erreurs`);
+
                 exec(chemin, (error) => {
                     if (error) {
                         console.error(`Erreur lors de la lecture du son : ${error}`);
