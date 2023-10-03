@@ -36,14 +36,15 @@ function activate(context) {
         if (activeEditor) {
 
             // constante
-            const chemin = "C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav"
+            // const chemin = "C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav"
             const numErrors = getNumErrors();
+            const command = process.platform === 'win32' ? 'powershell -Command "(New-Object Media.SoundPlayer \'C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav\').PlaySync()"' : 'afplay C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav\'';
 
             if (numErrors >= 1) {
                 console.error(`Votre code a ${numErrors} erreurs`)
                 vscode.window.showInformationMessage(`Votre code a ${numErrors} erreurs`);
-
-                exec(chemin, (error) => {
+                
+                exec(command, (error,stdout, stderr) => {
                     if (error) {
                         console.error(`Erreur lors de la lecture du son : ${error}`);
                         console.log("La musique n'est pas trouvée")
