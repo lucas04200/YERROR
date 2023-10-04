@@ -47,9 +47,7 @@ function playErrorSound(context) {
         if (numErrors >= 1) {
 
             if(!isSoundPlaying){
-                console.error(`Votre code a ${numErrors} erreurs`);
                 vscode.window.showInformationMessage(`Votre code a ${numErrors} erreurs`);
-    
                 let musicpath = `${context.extensionPath}/Assets/${audiosForPress[soundIndex]}`;
     
                 // Utilisez 'powershell' pour exécuter la commande de lecture de média sous Windows
