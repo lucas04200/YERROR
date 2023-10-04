@@ -85,6 +85,7 @@ function activate(context) {
     });
 
     async function choiceSoundHandler() {
+        // let items 
 		let items = [
 			// {
 			// 	label: "Test1 Label",
