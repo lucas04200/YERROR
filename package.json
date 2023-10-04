@@ -10,14 +10,14 @@
     "Other"
   ],
   "activationEvents": [
-    
+    "*"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
         "command": "Yerror.playErrorSound",
-        "title": "Yerror"
+        "title": "Yerror Sound"
       }
     ]
   },
@@ -37,6 +37,8 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "node-notifier": "^10.0.1"
+    "lodash.debounce": "^4.0.8",
+    "node-notifier": "^10.0.1",
+    "play-sound": "^1.1.6"
   }
 }

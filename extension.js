@@ -10,56 +10,67 @@ const { Console } = require('console');
 
 /**
  * @param {vscode.ExtensionContext} context
- */
+*/
 
 // function to get the number of errors in the open file
 function getNumErrors() {
     const activeTextEditor = vscode.window.activeTextEditor
     if (!activeTextEditor) {
-      return 0
+        return 0
     }
     const document = activeTextEditor.document
-
+    
     const numErrors = vscode.languages
-      .getDiagnostics(document.uri)
-      .filter(d => d.severity === vscode.DiagnosticSeverity.Error).length
+    .getDiagnostics(document.uri)
+    .filter(d => d.severity === vscode.DiagnosticSeverity.Error).length
 
     return numErrors
 }
 
-function activate(context) {
+let intervalId; // Identifiant de l'intervalle
+// Fonction pour jouer le son en cas d'erreurs
+function playErrorSound(context) {
+    const activeEditor = vscode.window.activeTextEditor;
 
-	console.log('Extension "Error Sound" activée.');
+    if (activeEditor) {
+        const numErrors = getNumErrors();
 
-    let disposable = vscode.commands.registerCommand('Yerror.playErrorSound', () => {
-        const activeEditor = vscode.window.activeTextEditor;
-        if (activeEditor) {
+        if (numErrors >= 1) {
+            console.error(`Votre code a ${numErrors} erreurs`);
+            vscode.window.showInformationMessage(`Votre code a ${numErrors} erreurs`);
 
-            // constante
-            const numErrors = getNumErrors();
+            const soundPath = `${context.extensionPath}/Assets/party.wav`;
 
-            // mettre le son en arrière plan et l'executer 
-            setTimeout(() => {
-                const command = process.platform === 'win32' ? 'powershell -Command "(New-Object Media.SoundPlayer \'C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav\').PlaySync()"' : 'afplay C:\\Users\\Ldech\\Desktop\\Travail\\Ynov\\B3\\Hackathon\\yerror\\Assets\\summer-party-157615.wav\'';
-                if (numErrors >= 1) {
-                    console.error(`Votre code a ${numErrors} erreurs`)
-                    vscode.window.showInformationMessage(`Votre code a ${numErrors} erreurs`);
-                    
-                    exec(command, (error,stdout, stderr) => {
-                        if (error) {
-                            console.error(`Erreur lors de la lecture du son : ${error}`);
-                            console.log("La musique n'est pas trouvée")
-                        }
-                    });           
+            // Utilisez 'powershell' pour exécuter la commande de lecture de média sous Windows
+            const command = `powershell -c (New-Object Media.SoundPlayer '${soundPath}').PlaySync()`;
+
+            exec(command, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Erreur lors de la lecture du son : ${error}`);
                 }
-            },0);
-
+            });
         }
-    });
-    context.subscriptions.push(disposable);
+    }
+}
 
+function activate(context) {
+    // Démarrez l'intervalle pour vérifier périodiquement les erreurs
+    intervalId = setInterval(() => playErrorSound(context), 5000); // Vérifiez toutes les secondes
+
+    // Enregistrez la commande pour arrêter l'intervalle si nécessaire
+    let disposable = vscode.commands.registerCommand('Yerror.stopErrorSound', () => {
+        clearInterval(intervalId); // Arrêtez l'intervalle
+        vscode.window.showInformationMessage('Arrêt de la vérification des erreurs sonores.');
+    });
+
+    context.subscriptions.push(disposable);
+}
+
+function deactivate() {
+    clearInterval(intervalId); // Assurez-vous d'arrêter l'intervalle lors de la désactivation
 }
 
 module.exports = {
 	activate,
+    deactivate
 }
