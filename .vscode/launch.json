@@ -7,7 +7,7 @@
 	"configurations": [
 		
 		{
-			"name": "Yerror",
+			"name": "Run Extension",
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
