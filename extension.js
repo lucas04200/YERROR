@@ -92,7 +92,7 @@ function activate(context) {
 			// 	// description: "Test1 Description",
 			// 	// detail: "$(files) Test1 Detail with icon",
 			// },
-			{ label: "Son1", value: 0 },
+			{ label: "Son gamer", value: 0 },
 		];
 
 		const select = vscode.window.showQuickPick(items);
