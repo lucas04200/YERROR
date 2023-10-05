@@ -28,7 +28,7 @@ Voici une liste des technologies utilisées :
 - Pour cela, il faut aller dans l'onglet "Extensions" et rechercher "Yerror".
 - Il faut ensuite cliquer sur "Installer" et redémarrer Visual Studio Code.
 - L'extension est maintenant installée et prête à être utilisée.
-- Pour l'utiliser, il faut ouvrir un projet et utilisé les commandes **Windows** : <kbd>CTRL</kbd> + <kbd>SHIFT</kbd> + <kbd>P</kbd>.
+- Pour l'utiliser, il faut ouvrir un projet et utilisé les commandes **suivantes** : <kbd>CTRL</kbd> + <kbd>SHIFT</kbd> + <kbd>P</kbd>.
 - Il faut ensuite rechercher "Yerror" et cliquer sur la musique d'erreur que vous avez à disposition.
 
 ## Répartition du travail
