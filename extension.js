@@ -8,9 +8,7 @@ const player = require("play-sound")();
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 
-/**
- * @param {vscode.ExtensionContext} context
-*/
+
 
 // function to get the number of errors in the open file
 function getNumErrors() {
@@ -47,7 +45,7 @@ function playErrorSound(context) {
         if (numErrors >= 1) {
 
             if(!isSoundPlaying){
-                vscode.window.showInformationMessage(`Votre code a ${numErrors} erreurs`);
+                vscode.window.setStatusBarMessage(`Votre code a ${numErrors} erreurs`);
                 let musicpath = `${context.extensionPath}/Assets/${audiosForPress[soundIndex]}`;
     
                 // Utilisez 'powershell' pour exécuter la commande de lecture de média sous Windows
