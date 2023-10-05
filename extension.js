@@ -1,122 +1,92 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-const vscode = require('vscode');
-const { exec } = require('child_process');
-const { Console } = require('console');
-const player = require("play-sound")();
+// Importation des modules nécessaires
+const vscode = require('vscode'); // VS Code API
+const { exec } = require('child_process'); // Module pour exécuter des commandes système
+const player = require("play-sound")(); // Module pour jouer des sons
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+// Déclarations de variables globales
+let intervalId; // Identifiant de l'intervalle pour vérifier les erreurs périodiquement
+let soundIndex = 0; // Index du son dans le dossier
+let isSoundPlaying = false; // Indicateur pour savoir si un son est en cours de lecture
 
-
-
-// function to get the number of errors in the open file
+// Fonction pour obtenir le nombre d'erreurs dans le fichier ouvert
 function getNumErrors() {
-    const activeTextEditor = vscode.window.activeTextEditor
-    if (!activeTextEditor) {
-        return 0
-    }
-    const document = activeTextEditor.document
-    
-    const numErrors = vscode.languages
-    .getDiagnostics(document.uri)
-    .filter(d => d.severity === vscode.DiagnosticSeverity.Error).length
+    const activeTextEditor = vscode.window.activeTextEditor;
+    if (!activeTextEditor) return 0; // Si aucun éditeur de texte n'est ouvert, il n'y a pas d'erreurs
 
-    return numErrors
+    const document = activeTextEditor.document;
+    // Récupère les diagnostics (erreurs) du document et filtre ceux qui ont une gravité "Error"
+    return vscode.languages.getDiagnostics(document.uri)
+        .filter(d => d.severity === vscode.DiagnosticSeverity.Error).length;
 }
-
-
-
+// Choix des fichiers audios
 const audiosForPress = [
     "son2.wav",
+    // Ajoutez ici d'autres noms de fichiers audio si nécessaire
 ];
-
-let intervalId; // Identifiant de l'intervalle
-let soundIndex = 0; // Index du son dans le dossier 
-let isSoundPlaying = false;
 
 // Fonction pour jouer le son en cas d'erreurs
 function playErrorSound(context) {
     const activeEditor = vscode.window.activeTextEditor;
-    
-    if (activeEditor) {
+    if (!activeEditor) return; // Si aucun éditeur de texte n'est ouvert, ne fait rien
 
-        const numErrors = getNumErrors();
-        if (numErrors >= 1) {
+    const numErrors = getNumErrors();
+    if (numErrors >= 1 && !isSoundPlaying) {
+        // S'il y a au moins une erreur et qu'aucun son n'est en cours de lecture
+        vscode.window.setStatusBarMessage(`Votre code a ${numErrors} erreurs`);
+        const musicpath = `${context.extensionPath}/Assets/${audiosForPress[soundIndex]}`;
+        const command = `powershell -c (New-Object Media.SoundPlayer '${musicpath}').PlaySync()`;
 
-            if(!isSoundPlaying){
-                vscode.window.setStatusBarMessage(`Votre code a ${numErrors} erreurs`);
-                let musicpath = `${context.extensionPath}/Assets/${audiosForPress[soundIndex]}`;
-    
-                // Utilisez 'powershell' pour exécuter la commande de lecture de média sous Windows
-                const command = `powershell -c (New-Object Media.SoundPlayer '${musicpath}').PlaySync()`;
-    
-                exec(command, (error, stdout, stderr) => {
-                    if (error) {
-                        console.error(`Erreur lors de la lecture du son : ${error}`);
-                    }
-                    // Marquez que la lecture est terminée
-                    isSoundPlaying = false;
-                });
-            }
-        } else{
-              // Si aucune erreur n'est détectée, arrêtez le son s'il est en cours de lecture
-              if (isSoundPlaying) {
-                // Arrêtez la lecture du son ici en utilisant la commande appropriée (par exemple, tuer le processus audio)
-                // Assurez-vous de mettre à jour la variable isSoundPlaying en conséquence
-                isSoundPlaying = false;
-            }
-        }
+        exec(command, (error) => {
+            if (error) console.error(`Erreur lors de la lecture du son : ${error}`);
+            isSoundPlaying = false; // Marque que la lecture est terminée
+        });
+    } else if (isSoundPlaying) {
+        // Si un son est en cours de lecture, arrêtez-le ici si nécessaire
+        isSoundPlaying = false;
     }
 }
 
+// Fonction d'activation de l'extension
 function activate(context) {
-    // Démarrez l'intervalle pour vérifier périodiquement les erreurs
-    intervalId = setInterval(() => playErrorSound(context),1000); // Vérifiez toutes les secondes
+    // Démarre l'intervalle pour vérifier périodiquement les erreurs
+    intervalId = setInterval(() => playErrorSound(context), 1000); // Vérifie toutes les secondes
 
-    // Enregistrez la commande pour arrêter l'intervalle si nécessaire
+    // Enregistre la commande pour arrêter l'intervalle si nécessaire
     let disposable = vscode.commands.registerCommand('Yerror.stopErrorSound', () => {
-        clearInterval(intervalId); // Arrêtez l'intervalle
+        clearInterval(intervalId); // Arrête l'intervalle
         vscode.window.showInformationMessage('Arrêt de la vérification des erreurs sonores.');
     });
 
-    async function choiceSoundHandler() {
-        // let items 
-		let items = [
-			// {
-			// 	label: "Test1 Label",
-			// 	value: 0
-			// 	// description: "Test1 Description",
-			// 	// detail: "$(files) Test1 Detail with icon",
-			// },
-			{ label: "Son gamer", value: 0 },
-		];
+    // Enregistre la commande pour choisir un son
+    const choiseSound = vscode.commands.registerCommand(
+        "Yerror.playErrorSound",
+        () => {
+            choiceSoundHandler();
+        }
+    );
 
-		const select = vscode.window.showQuickPick(items);
-		select.then((selected) => {
-			soundIndex = selected.value;
-			console.log(selected);
-		});
-	}
-
-	const choiseSound = vscode.commands.registerCommand(
-		"Yerror.playErrorSound",
-		() => {
-			choiceSoundHandler();
-		}
-	);
-
-	context.subscriptions.push(disposable);
-	context.subscriptions.push(choiseSound);
+    context.subscriptions.push(disposable);
+    context.subscriptions.push(choiseSound);
 }
 
+// Fonction pour gérer le choix du son
+function choiceSoundHandler() {
+    let items = [
+        { label: "Son gamer", value: 0 }, // Exemple d'élément de menu pour choisir un son
+    ];
 
+    // Affiche une liste rapide pour choisir un son
+    const select = vscode.window.showQuickPick(items);
+    select.then((selected) => {
+        soundIndex = selected.value;
+        console.log(selected);
+    });
+}
 
+// Fonction de désactivation de l'extension
 function deactivate() {
     clearInterval(intervalId); // Assurez-vous d'arrêter l'intervalle lors de la désactivation
 }
 
-module.exports = {
-	activate,
-    deactivate
-}
+// Exporte les fonctions d'activation et de désactivation de l'extension
+module.exports = { activate, deactivate };
