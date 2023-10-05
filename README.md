@@ -4,8 +4,9 @@
 
 1. [Informations](#informations)
 2. [Technologies](#technologies)
-3. [Répartition du travail](#répartition-du-travail)
-4. [Crédit](#crédit)
+3. [Utilisation](#utilisation)
+4. [Répartition du travail](#répartition-du-travail)
+5. [Crédit](#crédit)
 
 ## Informations
 
@@ -20,6 +21,15 @@ Voici une liste des technologies utilisées :
 - Git/Gant
 - JavaScript
 - HTML/CSS
+
+## Utilisation
+
+- Pour utiliser l'extension, il faut l'installer dans Visual Studio Code.
+- Pour cela, il faut aller dans l'onglet "Extensions" et rechercher "Yerror".
+- Il faut ensuite cliquer sur "Installer" et redémarrer Visual Studio Code.
+- L'extension est maintenant installée et prête à être utilisée.
+- Pour l'utiliser, il faut ouvrir un projet et utilisé les commandes **Windows** : <kbd>CTRL</kbd> + <kbd>SHIFT</kbd> + <kbd>P</kbd>.
+- Il faut ensuite rechercher "Yerror" et cliquer sur la musique d'erreur que vous avez à disposition.
 
 ## Répartition du travail
 
