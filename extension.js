@@ -41,6 +41,7 @@ function playErrorSound(context) {
             isSoundPlaying = false; // Marque que la lecture est terminée
         });
     } else if (isSoundPlaying) {
+        vscode.window.setStatusBarMessage("");
         // Si un son est en cours de lecture, arrêtez-le ici si nécessaire
         isSoundPlaying = false;
     }
