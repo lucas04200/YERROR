@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
+    "node-aplay": "^1.0.3",
     "node-notifier": "^10.0.1",
     "play-sound": "^1.1.6"
   },

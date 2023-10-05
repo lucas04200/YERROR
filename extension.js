@@ -1,12 +1,13 @@
 // Importation des modules nécessaires
 const vscode = require('vscode'); // VS Code API
 const { exec } = require('child_process'); // Module pour exécuter des commandes système
-const player = require("play-sound")(); // Module pour jouer des sons
+const player = require('play-sound')(); // Module pour jouer des sons
 
 // Déclarations de variables globales
 let intervalId; // Identifiant de l'intervalle pour vérifier les erreurs périodiquement
 let soundIndex = 0; // Index du son dans le dossier
 let isSoundPlaying = false; // Indicateur pour savoir si un son est en cours de lecture
+let gigachad = false; // Indicateur pour le son spécial "chad"
 
 // Fonction pour obtenir le nombre d'erreurs dans le fichier ouvert
 function getNumErrors() {
@@ -18,10 +19,10 @@ function getNumErrors() {
     return vscode.languages.getDiagnostics(document.uri)
         .filter(d => d.severity === vscode.DiagnosticSeverity.Error).length;
 }
+
 // Choix des fichiers audios
 const audiosForPress = [
-    "son2.wav",
-    // Ajoutez ici d'autres noms de fichiers audio si nécessaire
+    "son2.wav", "piano1.wav", "klaxon.wav", "bip.wav", "beep.wav", "chad.wav", "corbac.wav"
 ];
 
 // Fonction pour jouer le son en cas d'erreurs
@@ -31,19 +32,34 @@ function playErrorSound(context) {
 
     const numErrors = getNumErrors();
     if (numErrors >= 1 && !isSoundPlaying) {
+        gigachad = true;
         // S'il y a au moins une erreur et qu'aucun son n'est en cours de lecture
         vscode.window.setStatusBarMessage(`Votre code a ${numErrors} erreurs`);
         const musicpath = `${context.extensionPath}/Assets/${audiosForPress[soundIndex]}`;
         const command = `powershell -c (New-Object Media.SoundPlayer '${musicpath}').PlaySync()`;
 
+        // Exécute la commande système pour jouer le son
         exec(command, (error) => {
             if (error) console.error(`Erreur lors de la lecture du son : ${error}`);
             isSoundPlaying = false; // Marque que la lecture est terminée
         });
-    } else if (isSoundPlaying) {
-        vscode.window.setStatusBarMessage("");
+    } else {
+        vscode.window.setStatusBarMessage('');
         // Si un son est en cours de lecture, arrêtez-le ici si nécessaire
         isSoundPlaying = false;
+    }
+    
+    // Si gigachad est activé et il n'y a plus d'erreurs, jouez le son spécial "chad"
+    if (gigachad && numErrors === 0) {
+        gigachad = false;
+        const musicpath = `${context.extensionPath}/Assets/${audiosForPress[5]}`;
+        const command = `powershell -c (New-Object Media.SoundPlayer '${musicpath}').PlaySync()`;
+        
+        // Exécute la commande système pour jouer le son spécial "chad"
+        exec(command, (error) => {
+            if (error) console.error(`Erreur lors de la lecture du son : ${error}`);
+            isSoundPlaying = false; // Marque que la lecture est terminée
+        });
     }
 }
 
@@ -73,7 +89,12 @@ function activate(context) {
 // Fonction pour gérer le choix du son
 function choiceSoundHandler() {
     let items = [
-        { label: "Son gamer", value: 0 }, // Exemple d'élément de menu pour choisir un son
+        { label: "Son gamer", value: 0 },
+        { label: "Piano", value: 1 },
+        { label: "Klaxon", value: 2 },
+        { label: "Bip", value: 3 },
+        { label: "Beep", value: 4 },
+        { label: "Corbac", value: 6 },
     ];
 
     // Affiche une liste rapide pour choisir un son
