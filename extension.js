@@ -7,7 +7,7 @@ const player = require('play-sound')(); // Module pour jouer des sons
 let intervalId; // Identifiant de l'intervalle pour vérifier les erreurs périodiquement
 let soundIndex = 0; // Index du son dans le dossier
 let isSoundPlaying = false; // Indicateur pour savoir si un son est en cours de lecture
-let gigachad = false; // Indicateur pour le son spécial "chad"
+let music = false; // Indicateur pour le son spécial "chad"
 
 // Fonction pour obtenir le nombre d'erreurs dans le fichier ouvert
 function getNumErrors() {
@@ -32,7 +32,7 @@ function playErrorSound(context) {
 
     const numErrors = getNumErrors();
     if (numErrors >= 1 && !isSoundPlaying) {
-        gigachad = true;
+        music = true;
         // S'il y a au moins une erreur et qu'aucun son n'est en cours de lecture
         vscode.window.setStatusBarMessage(`Votre code a ${numErrors} erreurs`);
         const musicpath = `${context.extensionPath}/Assets/${audiosForPress[soundIndex]}`;
@@ -50,8 +50,8 @@ function playErrorSound(context) {
     }
     
     // Si gigachad est activé et il n'y a plus d'erreurs, jouez le son spécial "chad"
-    if (gigachad && numErrors === 0) {
-        gigachad = false;
+    if (music && numErrors === 0) {
+        music = false;
         const musicpath = `${context.extensionPath}/Assets/${audiosForPress[5]}`;
         const command = `powershell -c (New-Object Media.SoundPlayer '${musicpath}').PlaySync()`;
         
