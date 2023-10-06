@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Projet version with protection. 
+Project version with protection. 
 
 | Version | Supported          |
 | ------- | ------------------ |
