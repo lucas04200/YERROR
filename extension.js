@@ -7,7 +7,7 @@ const player = require('play-sound')(); // Module pour jouer des sons
 let intervalId; // Identifiant de l'intervalle pour vérifier les erreurs périodiquement
 let soundIndex = 0; // Index du son dans le dossier
 let isSoundPlaying = false; // Indicateur pour savoir si un son est en cours de lecture
-let music = false; // Indicateur pour le son spécial "chad"
+let music = false; // Indicateur pour le son spécial "musique"
 
 // Fonction pour obtenir le nombre d'erreurs dans le fichier ouvert
 function getNumErrors() {
@@ -49,13 +49,13 @@ function playErrorSound(context) {
         isSoundPlaying = false;
     }
     
-    // Si gigachad est activé et il n'y a plus d'erreurs, jouez le son spécial "chad"
+    // Si la musique est activé et il n'y a plus d'erreurs, jouez le son spécial "musique"
     if (music && numErrors === 0) {
         music = false;
         const musicpath = `${context.extensionPath}/Assets/${audiosForPress[5]}`;
         const command = `powershell -c (New-Object Media.SoundPlayer '${musicpath}').PlaySync()`;
         
-        // Exécute la commande système pour jouer le son spécial "chad"
+        // Exécute la commande système pour jouer le son spécial "musique"
         exec(command, (error) => {
             if (error) console.error(`Erreur lors de la lecture du son : ${error}`);
             isSoundPlaying = false; // Marque que la lecture est terminée
