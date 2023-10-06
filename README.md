@@ -47,5 +47,4 @@ Ce projet a été réalisé par :
 - EXPOSITO Bastien
 - BENSIMON Léonard
 - CHOLLET Gaetan
-- ARZINIERE-BAFFERT Robin
 - DECHAVANNE Lucas
