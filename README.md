@@ -35,9 +35,9 @@ Voici une liste des technologies utilisées :
 
 - Recherche sur les extensions (Tout le monde)
 - Hébergement : 1 B2 infra/IOT
-- Site vitrine : 1 B2 Dev
+- Site vitrine : 1 B3 Dev
 - Rendu écrit : 1 B2 Infra
-- Développement de l'application : 2 B3 Dev
+- Développement de l'application : 1 B3 Dev & 1 B3 DATA
 
 ## Crédit
 
